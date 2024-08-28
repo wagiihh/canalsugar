@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/admin2.css">
+    <link rel="stylesheet" href="../css/patient.css">
+    <link rel="stylesheet" href="../css/navigation.css">
+    <link rel="stylesheet" href="../css/viewTables.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: #f4f4f4;
+            border-right: 1px solid #ddd;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 10px;
+            margin-bottom: 10px;
+            color: #333;
+            text-decoration:solid;
+            border-radius: 4px;
+            transition: background-color 0.3s, color 0.3s; 
+}
+
+.sidebar a:hover {
+    background-color: #006d12; 
+    color: #ffffff;
+}
+
+        .main--container {
+            margin-left: 270px; /* Adjust this to fit the sidebar width */
+            padding: 20px;
+        }
+
+        table {
+            width: 80%;
+            margin: 0 auto;
+            border-collapse: collapse;
+            text-align: center;
+            margin-right: 300px;
+        }
+
+        th, td {
+            padding: 15px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .target-vs-sales--container {
+    background-image: url(../images/Sugar-factory.jpg);
+    background-size:cover;
+    background-position:center;
+    padding: 20px;
+}
+    </style>
+    <title>Canal Sugar</title>
+</head>
+
+<body class="body">
+    <div class="sidebar">
+        <h2>CANAL SUGAR</h2>
+        <a href="dashboard.html">STOCK</a>
+        <a href="appointments.html">RESOURCES</a>
+        <a th:href="@{/admin/adduser}">USERS</a>
+        <a href="settings.html">SETTINGS</a>
+        <a th:href="@{/admin/logout}">LOGOUT</a>
+    </div>
+
+    <div class="main--container">
+        <div class="target-vs-sales--container">
+            <div class="section--title">
+                <div class="sales--value">
+                    <h3 class="uppercase-text">Welcome  <span th:text="${FNAME}"></span>!</h3>
+
+                    <h3>Channel a supplier Here</h3>
+
+                    <form th:action="@{/User/search}" method="GET">
+                        <input type="search" name="search" class="input-text"
+                            placeholder="Search supplier"
+                            style="width:45%;">
+                        <input type="Submit" value="Search" class="login-btn btn-primary btn"
+                            style="padding-left: 25px; padding-right: 25px; padding-top: 10px; padding-bottom: 10px;">
+                    </form>
+                </div>
+            </div>
+            <div class="target--vs--sales">
+                <canvas id="tarsale"></canvas>
+            </div>
+        </div>
+        <div class="table">
+            <div class="section--title">
+                <h3 class="title">Upcoming Sessions</h3>
+                   
+               
+            </div>
+        </div>
+    </div>
+    <script src="assets/js/main.js"></script>
+    <script src="assets/js/sales.js"></script>
+    <script src="assets/js/orders.js"></script>
+    <script src="assets/js/products.js"></script>
+    <script src="assets/js/customers.js"></script>
+    <script src="assets/js/tarsale.js"></script>
+    <footer></footer>
+</body>
+
+</html>

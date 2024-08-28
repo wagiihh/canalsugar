@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+        integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('../images/canal-sugar.jpg');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            width: 350px;
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            margin-bottom: 1.5rem;
+            color: #333;
+        }
+
+        .login-container .login-field {
+            width: 100%;
+            padding: 0.75rem;
+            margin: 0.5rem 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-left: -10px;
+        }
+
+        .login-container .login-field:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .login-container .error-message {
+            color: red;
+            font-size: 0.875rem;
+            text-align: left;
+        }
+
+        .login-container .link {
+            color: #007bff;
+            text-decoration: none;
+            font-size: 0.875rem;
+        }
+
+        .login-container .link:hover {
+            text-decoration: underline;
+        }
+
+        .login-container .submit-btn {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+
+        .login-container .submit-btn:hover {
+            background-color: #0056b3;
+        }
+
+        .login-container .sign-up {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #333;
+        }
+
+        .login-container .sign-up a {
+            color: #007bff;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div class="login-container">
+        <h1>WELCOME</h1>
+        <form id="login-form" th:action="@{/admin/Login}" method="POST" onsubmit="return validateLoginForm()">
+            <input class="login-field" type="text" name="email" id="email" placeholder="Email">
+            <span id="email-error" class="error-message"></span>
+            
+            <input class="login-field" type="password" name="pass" id="pass" placeholder="Password">
+            <span id="pass-error" class="error-message"></span>
+
+            <a class="link" th:href="@{/admin/forgetpassword}">Forgot Password?</a>
+
+            <span id="Error-login" class="error-message"></span>
+            <button type="submit" class="submit-btn">Login</button>
+        </form>
+
+
+    </div>
+
+    <script>
+        function validateLoginForm() {
+            var email = document.getElementById("email").value.trim();
+            var pass = document.getElementById("pass").value.trim();
+            var emailError = document.getElementById("email-error");
+            var passError = document.getElementById("pass-error");
+            var isValid = true;
+
+            emailError.textContent = "";
+            passError.textContent = "";
+
+            if (email === "") {
+                emailError.textContent = "Email is required";
+                isValid = false;
+            }
+
+            if (pass === "") {
+                passError.textContent = "Password is required";
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        function getParameterByName(name, url) {
+            var errormess = document.getElementById("Error-login");
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, "\\$&");
+            var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, " "));
+        }
+
+        var errorMessage = getParameterByName('error');
+        if (errorMessage) {
+            var errorLogin = document.getElementById("Error-login");
+            errorLogin.textContent = errorMessage;
+        }
+    </script>
+</body>
+
+</html>
