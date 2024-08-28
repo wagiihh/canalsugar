@@ -5,101 +5,75 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canal Sugar</title>
-    <link rel="stylesheet" href="../public/css/admin2.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
     <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 </head>
 <style>
-.profile-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 10px;
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 20px;
+    .top-bar {
+ width: calc(100% - 250px); /* Adjust to fit the sidebar width */
+ height: 50px; /* Height of the top bar */
+ background-color: #f4f4f4; /* Background color of the top bar */
+ color: #fff; /* Text color */
+ position: fixed;
+ top: 0;
+ left: 250px; /* Start after the sidebar */
+ z-index: 1000; /* Ensure it is above other content */
+ box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
 }
 
-.profile-box img {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    margin-bottom: 10px;
-}
 
-.profile-box span {
-    font-weight: 600;
-}
+ .sidebar {
+     width: 250px;
+     position: fixed;
+     top: 0;
+     left: 0;
+     height: 100%;
+     background-color: #f4f4f4;
+     border-right: 1px solid #ddd;
+     padding: 20px;
+     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+     z-index: 999; /* Ensure sidebar is below the top bar */
+ }
 
-.sidebar--items {
-    margin-top: 22px;
-}
+ .sidebar a {
+     display: block;
+     padding: 10px;
+     margin-bottom: 10px;
+     color: #333;
+     text-decoration: solid;
+     border-radius: 4px;
+     transition: background-color 0.3s, color 0.3s; 
+ }
 
-li {
-    padding-top: 10px;
-}
-.uppercase-text {
-    text-transform: uppercase;
-}
+ .sidebar a:hover {
+     background-color: #165d0a; 
+     color: #ffffff;
+ }
+ .container {
+     margin-left: 270px; /* Adjust to fit the sidebar width */
+     padding-top: 10px; /* Add some padding at the top if needed */
+ }
+ .card-title{
+     margin-left: 530px; 
+     font-size:36px;
+     
+ }
 </style>
 <body >
-
-<section class="header">
-    <div class="logo">
-        <i class="ri-menu-line menu"></i>
-        <h2><span>Canal</span> Sugar.</h2>
+    <div class="top-bar">
+        <h2 style="text-align: center; padding: 10px;"></h2>
     </div>
-    <div class="header--items"> 
-        <div class="dark--theme--btn">
-            <i class="ri-notification-2-line"></i>
-        </div>
-    </div>
-</section>
-
-<section class="main">
     <div class="sidebar">
-        <ul class="sidebar--items">
-            <div class="profile-box">
-                <img src="../public/images/<?php echo $_SESSION['image'];?>" alt="Profile Image">
-                <span><?php echo $_SESSION["email"]; ?></span>
-            </div>
-
-            <!-- Static Navigation Menu -->
-            <li>
-                <a class="dashboard" href="dashboard.php">
-                    <span class="icon"><i class="ri-dashboard-line"></i></span>
-                    <div class="sidebar--item">Dashboard</div>
-                </a>
-            </li>
-            <li>
-                <a class="appointments" href="appointments.php">
-                    <span class="icon"><i class="ri-calendar-check-line"></i></span>
-                    <div class="sidebar--item">Sessions</div>
-                </a>
-            </li>
-            <li>
-                <a class="patients" href="patients.php">
-                    <span class="icon"><i class="ri-user-3-line"></i></span>
-                    <div class="sidebar--item">Customers</div>
-                </a>
-            </li>
-            <li>
-                <a class="settings" href="settings.php">
-                    <span class="icon"><i class="ri-settings-3-line"></i></span>
-                    <div class="sidebar--item">Settings</div>
-                </a>
-            </li>
-            <li>
-                <a class="logout" href="logout.php">
-                    <span class="icon"><i class="ri-logout-box-line"></i></span>
-                    <div class="sidebar--item">Logout</div>
-                </a>
-            </li>
-            <!-- End of Static Navigation Menu -->
-        </ul>
+        <h2>CANAL SUGAR</h2>
+        <a th:href="@{/admin/home}">HOME</a>
+        <a href="dashboard.html">STOCK</a>
+        <a href="appointments.html">RESOURCES</a>
+        <a th:href="@{/admin/viewUsers}">USERS</a>
+        <a th:href="@{/admin/settings}">SETTINGS</a>
+        <a th:href="@{/admin/logout}">LOGOUT</a>
     </div>
-</section>
 
 </body>
 </html>

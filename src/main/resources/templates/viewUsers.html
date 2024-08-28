@@ -62,7 +62,7 @@
  
 </style>
 <body>
-    <div class="top-bar">
+    <!-- <div class="top-bar">
         <h2 style="text-align: center; padding: 10px;"></h2>
     </div>
     <div class="sidebar">
@@ -72,6 +72,9 @@
         <a th:href="@{users.html}">USERS</a>
         <a href="settings.html">SETTINGS</a>
         <a th:href="@{/admin/logout}">LOGOUT</a>
+    </div> -->
+    <div th:include="navigation">
+      
     </div>
 
     <div class="view" >

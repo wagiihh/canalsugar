@@ -48,6 +48,75 @@ public class AdminController {
         return mav;
     }
 
+    @GetMapping("/settings")
+    public ModelAndView settings(HttpSession session) {
+        String firstname = (String) session.getAttribute("Firstname");
+        
+        ModelAndView mav = new ModelAndView("AccountSettings");
+        mav.addObject("email",(String) session.getAttribute("email"));
+        mav.addObject("FNAME", firstname);
+        return mav;
+    }
+
+    @GetMapping("Profile")
+    public ModelAndView getProfile(HttpSession session)
+    {
+        ModelAndView mav = new ModelAndView("Profile");
+
+       mav.addObject("email",(String) session.getAttribute("email"));
+       mav.addObject("firstname",(String) session.getAttribute("Firstname"));
+       mav.addObject("lastname",(String) session.getAttribute("Lastname"));
+       mav.addObject("number",(String) session.getAttribute("number"));
+       return mav;
+    }
+
+    @GetMapping("editprofile")
+    public ModelAndView getEditProfile(HttpSession session)
+    {
+        ModelAndView mav = new ModelAndView("EditProfile");
+
+       mav.addObject("email",(String) session.getAttribute("email"));
+       mav.addObject("firstname",(String) session.getAttribute("Firstname"));
+       mav.addObject("lastname",(String) session.getAttribute("Lastname"));
+       mav.addObject("number",(String) session.getAttribute("number"));
+       mav.addObject("adminID",(Integer) session.getAttribute("adminID"));
+
+       return mav;
+    }
+    @PostMapping("/editprofile")
+    public RedirectView editprocess(HttpSession session,
+    @RequestParam("firstname") String firstname,
+    @RequestParam("lastname") String lastname,
+    @RequestParam("number") String number) 
+    {
+        Admin adminedit = this.adminRepository.findByEmail((String) session.getAttribute("email"));
+        if (adminedit != null) {
+            session.setAttribute("Firstname", firstname);
+            session.setAttribute("Lastname", lastname);
+            session.setAttribute("number", number);
+            
+            adminedit.setFirstname(firstname);
+            adminedit.setLastname(lastname);
+            adminedit.setNumber(number);
+            this.adminRepository.save(adminedit);
+            
+            return new RedirectView("/admin/home");
+        }
+        return new RedirectView("/admin/editprofile?error=incorrectForm");
+    
+    }
+
+    @GetMapping("/deleteAccount")
+    public RedirectView deleteAccount(HttpSession session) {
+        Admin adminDelete = this.adminRepository.findByEmail((String) session.getAttribute("email"));
+        if (adminDelete != null) {
+                this.adminRepository.delete(adminDelete);
+                session.invalidate(); 
+                return new RedirectView("/"); 
+        }
+        return new RedirectView("/admin/Profile"); 
+    }
+
     @GetMapping("/adduser")
     public ModelAndView showSignupForm() {
         ModelAndView mav = new ModelAndView("signup.html");
@@ -133,6 +202,7 @@ public RedirectView deleteAppointment(@PathVariable Integer userID) {
                 session.setAttribute("adminID", newUser.getAdminID());
                 session.setAttribute("Firstname", newUser.getFirstname());
                 session.setAttribute("Lastname", newUser.getLastname());
+                session.setAttribute("number", newUser.getNumber());
                 return new RedirectView("/admin/home");
 
             } else {
