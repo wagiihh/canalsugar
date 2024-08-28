@@ -19,10 +19,12 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.canalsugar.Models.Admin;
+import com.example.canalsugar.Models.AssignedLaptops;
 import com.example.canalsugar.Models.Department;
 import com.example.canalsugar.Models.Laptop;
 import com.example.canalsugar.Models.User;
 import com.example.canalsugar.Repositories.AdminRepository;
+import com.example.canalsugar.Repositories.AssignedLaptopsRepository;
 import com.example.canalsugar.Repositories.DepartmentRepository;
 import com.example.canalsugar.Repositories.LaptopRepository;
 import com.example.canalsugar.Repositories.UserRepository;
@@ -42,6 +44,8 @@ public class AdminController {
     private DepartmentRepository departmentRepository;
     @Autowired
     private LaptopRepository laptopRepository;
+    @Autowired
+    private AssignedLaptopsRepository assignedLaptopsRepository;
 
     @GetMapping("/home")
     public ModelAndView Home(HttpSession session) {
@@ -277,7 +281,55 @@ public class AdminController {
         }
         return new RedirectView("/User/Login?error=userNotFound  " + email);
     }
+     
+    @GetMapping("/assignLaptop")
+public ModelAndView showAssignLaptopForm() {
+    ModelAndView mav = new ModelAndView("AssignLaptops");
+    mav.addObject("users", userRepository.findAll());
+    mav.addObject("laptops", laptopRepository.findAll());
+    mav.addObject("assignedLaptop", new AssignedLaptops());
+    return mav;
+}
 
+@PostMapping("/assignLaptop")
+public ModelAndView assignLaptop(@ModelAttribute("assignedLaptop") AssignedLaptops assignedLaptop, ModelAndView mav) {
+    mav.setViewName("AssignLaptops");
+
+    Laptop laptop = assignedLaptop.getLaptop();
+    
+    // Check if the laptop is already assigned to another user
+    if (assignedLaptopsRepository.findByLaptop(laptop) != null) {
+        mav.addObject("error", "This laptop is already assigned to another user.");
+        mav.addObject("users", userRepository.findAll());
+        mav.addObject("laptops", laptopRepository.findAll());
+        return mav;
+    }
+
+    try {
+        assignedLaptopsRepository.save(assignedLaptop);
+    } catch (Exception e) {
+        e.printStackTrace(); // Log the exception
+        mav.addObject("error", "An error occurred while assigning the laptop.");
+        mav.addObject("users", userRepository.findAll());
+        mav.addObject("laptops", laptopRepository.findAll());
+        return mav;
+    }
+
+    return new ModelAndView("redirect:/admin/viewlaptops");
+}
+    
+    
+@GetMapping("/viewassignedlaptops")
+public ModelAndView showassigendForm() {
+    ModelAndView mav = new ModelAndView("viewAssignedLaptops");
+
+    AssignedLaptops assignedLaptops=new AssignedLaptops();
+
+    List<AssignedLaptops> allAssignedLaptops = assignedLaptopsRepository.findAll();
+    mav.addObject("allAssignedLaptops", allAssignedLaptops);
+
+    return mav;
+}
     @GetMapping("/logout")
     public RedirectView logout(HttpSession session) {
         session.invalidate();

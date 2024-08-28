@@ -24,7 +24,7 @@ public class AssignedLaptops {
 
     @NotNull
     @ManyToOne
-    @JoinColumn(name = "LaptopID", referencedColumnName = "LaptopID", insertable = true, updatable = true)
+    @JoinColumn(name = "laptopid", referencedColumnName = "laptopid", insertable = true, updatable = true)
     private Laptop laptop;
 
     public AssignedLaptops() {
@@ -34,6 +34,10 @@ public class AssignedLaptops {
         this.alID = alID;
         this.user = user;
         this.laptop = laptop;
+    }
+    public AssignedLaptops getAssignedLaptop()
+    {
+        return this;
     }
 
     public int getAlID() {
@@ -55,7 +59,7 @@ public class AssignedLaptops {
     public Laptop getLaptop() {
         return this.laptop;
     }
-
+    
     public void setLaptop(Laptop laptop) {
         this.laptop = laptop;
     }
