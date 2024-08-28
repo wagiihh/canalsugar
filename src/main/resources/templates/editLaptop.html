@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/appointmentForm.css">
+    <title>Edit USERS</title>
+</head>
+
+<h2>Editing the Laptop with serial number = <span th:text="${oldLaptop.laptopserial}"></span></h2>
+<style>
+
+    .container {
+        margin-left: 270px; /* Adjust to fit the sidebar width */
+        padding-top: 10px; /* Add some padding at the top if needed */
+    }
+    .card-title{
+        margin-left: 530px; 
+        font-size:36px;
+        
+    }
+</style>
+<body>
+    <div th:insert="navigation">
+      
+    </div>
+
+        <div class="container mt-5">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title">LAPTOP EDIT</h2>
+                        <form id="UserForm" th:action="@{/admin/editlaptops/{laptopid}(laptopid=${oldLaptop.laptopid})}" method="post"
+                        th:object="${oldLaptop}">
+                        <input type="hidden" th:field="*{laptopid}">
+                        <div id="patient-fields">
+                            <div class="form-group">
+                                <label for="LaptopName">Laptop Name:</label>
+                                <input type="text" class="form-control" id="Laptopname" th:field="*{Laptopname}" placeholder="First Name" th:value="${oldLaptop.Laptopname}" >
+                                <span th:if="${#fields.hasErrors('Laptopname')}" th:errors="*{Laptopname}" class="error-message"></span>
+                                <span id="error-fname" class="error-message"> </span>
+                            </div>
+    
+                            <div class="form-group">
+                                <label for="lastname">laptop Serial Number:</label>
+                                <input type="text" class="form-control" id="laptopserial" th:field="*{laptopserial}" placeholder="laptop Serial Number" th:value="${oldLaptop.laptopserial}">
+                                <span th:if="${#fields.hasErrors('laptopserial')}" th:errors="*{laptopserial}" class="error-message"></span>
+                                <div id="lname-error" class="error-message"></div>
+                                <span id="error-lname" class="error-message"> </span>
+                            </div>
+    
+                            <div class="form-group">
+                                <label for="phone"> Laptop Model:</label>
+                                <input type="text" class="form-control" id="LaptopModel" th:field="*{LaptopModel}" placeholder="Laptop Model" th:value="${oldLaptop.LaptopModel}">
+                                <span th:if="${#fields.hasErrors('LaptopModel')}" th:errors="*{LaptopModel}" class="error-message"></span>
+                                <span id="error-phone" class="error-message"> </span>
+                            </div>
+    
+                        </div>
+    
+    
+                        <button id="submit" type="submit" class="btn btn-primary" name="submit">EDIT</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- select the date <span id="dateError" style="color: red;"></span>
+        <input type="date" id="date" th:field="*{date}" placeholder="Enter appointment's date">
+       
+        
+        select the time <span id="timeError" style="color: red;"></span>
+        <input type="text" id="time" th:field="*{time}" placeholder="Enter appointment's time">
+        
+        
+       select the price <span id="priceError" style="color: red;"></span>
+        <input type="text" id="price" th:field="*{price}" placeholder="Enter appointment's price">
+        
+        
+        select the status <span id="statusError" style="color: red;"></span>
+        <select id="status" th:field="*{status}">
+            <option value="">Select status</option>
+            <option value="available">Available</option>
+            <option value="reserved">Reserved</option>
+        </select>
+        
+        
+       select the clinic
+        <select id="clinic" th:field="*{clinic.uid}">
+            <option th:each="x : ${clinics}" th:value="${x.uid}" th:text="${x.cname}"></option>
+        </select>
+        <span id="clinicError" style="color: red;"></span>
+        
+        select the doctor
+        <select id="doctor" th:field="*{doctor.uid}">
+            <option th:each="y : ${doctors}" th:value="${y.uid}" th:text="${y.firstname + ' ' + y.lastname}"></option>
+        </select>
+        <span id="doctorError" style="color: red;"></span>
+        
+        <button type="button" onclick="validateForm()">Submit</button>
+        
+        <!-- Global error message -->
+        <span id="globalError" style="color: red;"></span> -->
+    </form>
+</body>
+
+<script>
+    function validateForm() {
+        var date = document.getElementById("date").value;
+        var time = document.getElementById("time").value;
+        var price = document.getElementById("price").value;
+        var status = document.getElementById("status").value;
+        var clinic = document.getElementById("clinic").value;
+        var doctor = document.getElementById("doctor").value;
+        var globalError = document.getElementById("globalError");
+        var isValid = true;
+
+        // Clear previous error messages
+        var errorSpans = document.querySelectorAll("span[id$='Error']");
+        errorSpans.forEach(function(span) {
+            span.innerText = "";
+        });
+
+        // Validate all fields are not empty
+        if (!date.trim() || !time.trim() || !price.trim() || !status.trim() || !clinic.trim() || !doctor.trim()) {
+            globalError.innerText = "All fields are required";
+            isValid = false;
+        }
+      
+        if (date === "") {
+            document.getElementById("dateError").innerText = "Date is required";
+            isValid = false;
+        } else {
+            // Convert selected date to Date object
+            var selectedDate = new Date(date);
+            // Get current date
+            var currentDate = new Date();
+            // Compare selected date with current date
+            if (selectedDate < currentDate) {
+                document.getElementById("dateError").innerText = "Date must be present or future";
+                isValid = false;
+            }
+        }
+
+        
+        var timeRegex = /^(0?[1-9]|1[0-2]):[0-5][0-9] (am|pm)$/;
+        if (!timeRegex.test(time)) {
+            document.getElementById("timeError").innerText = "Invalid time format. Please use format like '2:45 pm'";
+            isValid = false;
+        }
+
+       
+        if (isNaN(price)) {
+            document.getElementById("priceError").innerText = "Price must be a number";
+            isValid = false;
+        }
+
+        
+        if (status === "") {
+            document.getElementById("statusError").innerText = "Status is required";
+            isValid = false;
+        }
+
+        
+        if (clinic === "") {
+            document.getElementById("clinicError").innerText = "Clinic is required";
+            isValid = false;
+        }
+
+        
+        if (doctor === "") {
+            document.getElementById("doctorError").innerText = "Doctor is required";
+            isValid = false;
+        }
+
+       
+        if (isValid) {
+            document.getElementById("appointmentForm").submit();
+        } else {
+            globalError.innerText = "Please fix the errors before submitting";
+        }
+    }
+</script>
+
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+    }
+
+    form {
+        max-width: 600px;
+        margin: 50px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form input,
+    form select,
+    form button {
+        width: 100%;
+        padding: 10px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        box-sizing: border-box;
+        border-radius: 4px;
+    }
+
+    form button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    form button:hover {
+        background-color: #45a049;
+    }
+</style>
+
+</html>

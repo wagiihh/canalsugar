@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asset Addition</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap">
+    <link rel="stylesheet" href="/css/Signup_styling.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Oswald:wght@600&family=Poppins:wght@300;600&family=Righteous&family=Roboto+Slab:wght@100..900&family=Rubik:ital@1&display=swap" rel="stylesheet">
+ 
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script> 
+    <script src="/js/signup.js"></script>
+    <script>
+        function disableFields(disable, container) {
+            container.querySelectorAll("input, select").forEach(function (input) {
+                input.disabled = disable;
+            });
+        }
+
+        function validateForm() {
+            var email = document.getElementById('email').value.trim();
+            var password = document.getElementById('password').value.trim();
+            var fname = document.getElementById('firstname').value.trim();
+            var lname = document.getElementById('lastname').value.trim();
+            var age = document.getElementById('age').value.trim();
+            var phone = document.getElementById('phone').value.trim();
+            var address = document.getElementById('address').value.trim();
+            var emailError = document.getElementById("error-email");
+            var passError = document.getElementById("error-pass");
+            var lname_error = document.getElementById("error-lname");
+            var fname_error = document.getElementById("error-fname");
+            var age_error = document.getElementById("error-age");
+            var address_error = document.getElementById("error-address");
+            var phone_error = document.getElementById("error-phone");
+
+            var isValid = true;
+
+            if (!email) {
+                emailError.textContent = "Email is required";
+                isValid = false;
+                return false;
+            }
+
+            if (password === "") {
+                passError.textContent = "Password can't be empty";
+                isValid = false;
+                return false;
+            }
+            if (password.length < 6) {
+                passError.textContent = "Password cannot be less than 6 characters";
+                isValid = false;
+                return false; 
+            }
+
+            if (!isValid) {
+                event.preventDefault();
+            }
+            return isValid;
+        }
+    </script>
+</head>
+
+<style>
+
+
+    body {
+        background-image: url('../images/CSHOME.jpg');
+        background-position: center;
+        background-size: contain;
+        margin-top: 50px; /* Adjust margin to account for the top bar */
+    }
+
+    .container {
+        margin-left: 270px; /* Adjust to fit the sidebar width */
+        padding-top: 10px; /* Add some padding at the top if needed */
+    }
+</style>
+
+<body>
+    <div th:include="navigation">
+      
+    </div>
+ 
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">Laptop Registration</h2>
+                <form th:action="@{/admin/addlaptop}" th:object="${newLaptop}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                    <div id="patient-fields">
+                        <div class="form-group">
+                            <label for="firstname">Laptop Name:</label>
+                            <input type="text" class="form-control" id="Laptopname" th:field="*{Laptopname}" placeholder=" Laptop Name" >
+                            <span th:if="${#fields.hasErrors('Laptopname')}" th:errors="*{Laptopname}" class="error-message"></span>
+                            <span id="error-fname" class="error-message"> </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="lastname">Laptop Serial Number:</label>
+                            <input type="text" class="form-control" id="LaptopSerial" th:field="*{laptopserial}" placeholder="Laptop Serial Number" >
+                            <span th:if="${#fields.hasErrors('laptopserial')}" th:errors="*{laptopserial}" class="error-message"></span>
+                            <div id="lname-error" class="error-message"></div>
+                            <span id="error-lname" class="error-message"> </span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Laptop Model:</label>
+                            <input type="text" class="form-control" id="phone" th:field="*{LaptopModel}" placeholder="Laptop Model" >
+                            <span th:if="${#fields.hasErrors('LaptopModel')}" th:errors="*{LaptopModel}" class="error-message"></span>
+                            <span id="error-phone" class="error-message"> </span>
+                        </div>
+
+                    </div>        
+                    
+                    <button id="submit" type="submit" class="btn btn-primary" name="submit">Register Now</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

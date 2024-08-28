@@ -20,9 +20,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import com.example.canalsugar.Models.Admin;
 import com.example.canalsugar.Models.Department;
+import com.example.canalsugar.Models.Laptop;
 import com.example.canalsugar.Models.User;
 import com.example.canalsugar.Repositories.AdminRepository;
 import com.example.canalsugar.Repositories.DepartmentRepository;
+import com.example.canalsugar.Repositories.LaptopRepository;
 import com.example.canalsugar.Repositories.UserRepository;
 
 import jakarta.servlet.http.HttpSession;
@@ -38,6 +40,8 @@ public class AdminController {
     private UserRepository userRepository;
     @Autowired
     private DepartmentRepository departmentRepository;
+    @Autowired
+    private LaptopRepository laptopRepository;
 
     @GetMapping("/home")
     public ModelAndView Home(HttpSession session) {
@@ -51,70 +55,68 @@ public class AdminController {
     @GetMapping("/settings")
     public ModelAndView settings(HttpSession session) {
         String firstname = (String) session.getAttribute("Firstname");
-        
+
         ModelAndView mav = new ModelAndView("AccountSettings");
-        mav.addObject("email",(String) session.getAttribute("email"));
+        mav.addObject("email", (String) session.getAttribute("email"));
         mav.addObject("FNAME", firstname);
         return mav;
     }
 
     @GetMapping("Profile")
-    public ModelAndView getProfile(HttpSession session)
-    {
+    public ModelAndView getProfile(HttpSession session) {
         ModelAndView mav = new ModelAndView("Profile");
 
-       mav.addObject("email",(String) session.getAttribute("email"));
-       mav.addObject("firstname",(String) session.getAttribute("Firstname"));
-       mav.addObject("lastname",(String) session.getAttribute("Lastname"));
-       mav.addObject("number",(String) session.getAttribute("number"));
-       return mav;
+        mav.addObject("email", (String) session.getAttribute("email"));
+        mav.addObject("firstname", (String) session.getAttribute("Firstname"));
+        mav.addObject("lastname", (String) session.getAttribute("Lastname"));
+        mav.addObject("number", (String) session.getAttribute("number"));
+        return mav;
     }
 
     @GetMapping("editprofile")
-    public ModelAndView getEditProfile(HttpSession session)
-    {
+    public ModelAndView getEditProfile(HttpSession session) {
         ModelAndView mav = new ModelAndView("EditProfile");
 
-       mav.addObject("email",(String) session.getAttribute("email"));
-       mav.addObject("firstname",(String) session.getAttribute("Firstname"));
-       mav.addObject("lastname",(String) session.getAttribute("Lastname"));
-       mav.addObject("number",(String) session.getAttribute("number"));
-       mav.addObject("adminID",(Integer) session.getAttribute("adminID"));
+        mav.addObject("email", (String) session.getAttribute("email"));
+        mav.addObject("firstname", (String) session.getAttribute("Firstname"));
+        mav.addObject("lastname", (String) session.getAttribute("Lastname"));
+        mav.addObject("number", (String) session.getAttribute("number"));
+        mav.addObject("adminID", (Integer) session.getAttribute("adminID"));
 
-       return mav;
+        return mav;
     }
+
     @PostMapping("/editprofile")
     public RedirectView editprocess(HttpSession session,
-    @RequestParam("firstname") String firstname,
-    @RequestParam("lastname") String lastname,
-    @RequestParam("number") String number) 
-    {
+            @RequestParam("firstname") String firstname,
+            @RequestParam("lastname") String lastname,
+            @RequestParam("number") String number) {
         Admin adminedit = this.adminRepository.findByEmail((String) session.getAttribute("email"));
         if (adminedit != null) {
             session.setAttribute("Firstname", firstname);
             session.setAttribute("Lastname", lastname);
             session.setAttribute("number", number);
-            
+
             adminedit.setFirstname(firstname);
             adminedit.setLastname(lastname);
             adminedit.setNumber(number);
             this.adminRepository.save(adminedit);
-            
+
             return new RedirectView("/admin/home");
         }
         return new RedirectView("/admin/editprofile?error=incorrectForm");
-    
+
     }
 
     @GetMapping("/deleteAccount")
     public RedirectView deleteAccount(HttpSession session) {
         Admin adminDelete = this.adminRepository.findByEmail((String) session.getAttribute("email"));
         if (adminDelete != null) {
-                this.adminRepository.delete(adminDelete);
-                session.invalidate(); 
-                return new RedirectView("/"); 
+            this.adminRepository.delete(adminDelete);
+            session.invalidate();
+            return new RedirectView("/");
         }
-        return new RedirectView("/admin/Profile"); 
+        return new RedirectView("/admin/Profile");
     }
 
     @GetMapping("/adduser")
@@ -122,7 +124,7 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("signup.html");
         User newUser = new User();
         mav.addObject("newUser", newUser);
-        Department department=new Department();
+        Department department = new Department();
         List<Department> departments = departmentRepository.findAll();
         mav.addObject("departments", departments);
         return mav;
@@ -174,14 +176,78 @@ public class AdminController {
         this.userRepository.save(oldUser);
         return new RedirectView("/admin/viewUsers");
     }
-@GetMapping("delete/{userID}")
-@Transactional
-public RedirectView deleteAppointment(@PathVariable Integer userID) {
-    User currUser = this.userRepository.findByUserID(userID);
-    this.userRepository.delete(currUser);
 
-    return new RedirectView("/admin/viewUsers");
-}
+    @GetMapping("delete/{userID}")
+    @Transactional
+    public RedirectView deleteAppointment(@PathVariable Integer userID) {
+        User currUser = this.userRepository.findByUserID(userID);
+        this.userRepository.delete(currUser);
+
+        return new RedirectView("/admin/viewUsers");
+    }
+
+    @GetMapping("/addlaptop")
+    public ModelAndView showLaptopSignupForm() {
+        ModelAndView mav = new ModelAndView("addLaptop");
+        Laptop newLaptop = new Laptop();
+        mav.addObject("newLaptop", newLaptop);
+        return mav;
+    }
+
+    @PostMapping("addlaptop")
+    public ModelAndView processLaptopSignupForm(@Valid @ModelAttribute("newLaptop") Laptop newLaptop,
+            BindingResult result) {
+        ModelAndView SignupModel = new ModelAndView("addLaptop");
+        ModelAndView refresh = new ModelAndView("CSHOME.html");
+
+        Laptop existingLaptop = laptopRepository.findBylaptopserial(newLaptop.getLaptopserial());
+
+        if (existingLaptop != null) {
+            return SignupModel;
+        } else {
+            Laptop laptop = newLaptop.getLaptop();
+            this.laptopRepository.save(laptop);
+            return new ModelAndView("redirect:/admin/home");
+
+        }
+    }
+
+    @GetMapping("/viewlaptops")
+    public ModelAndView showAddLaptopForm() {
+        ModelAndView mav = new ModelAndView("viewLaptops");
+
+        Laptop newLaptop = new Laptop();
+
+        List<Laptop> allLaptops = laptopRepository.findAll();
+        mav.addObject("allLaptops", allLaptops);
+
+        return mav;
+    }
+
+    @GetMapping("editlaptops/{laptopid}")
+    public ModelAndView editLaptopForm(@PathVariable Integer laptopid, HttpSession session) {
+        ModelAndView mav = new ModelAndView("editLaptop");
+        Laptop oldLaptop = this.laptopRepository.findBylaptopid(laptopid);
+        System.out.println("-------------------------------------the user sent in the edit form :" + laptopid);
+        mav.addObject("oldLaptop", oldLaptop);
+        return mav;
+    }
+
+    @PostMapping("editlaptops/{laptopid}")
+    public RedirectView updateLaptop(@ModelAttribute("oldLaptop") Laptop oldLaptop, @PathVariable Integer laptopid) {
+        oldLaptop.setLaptopid(laptopid);
+        this.laptopRepository.save(oldLaptop);
+        return new RedirectView("/admin/viewlaptops");
+    }
+
+    @GetMapping("deletelaptops/{laptopid}")
+    @Transactional
+    public RedirectView deleteLaptop(@PathVariable Integer laptopid) {
+        Laptop currLaptop = this.laptopRepository.findBylaptopid(laptopid);
+        this.laptopRepository.delete(currLaptop);
+
+        return new RedirectView("/admin/viewlaptops");
+    }
 
     @GetMapping("/Login")
     public ModelAndView Login() {
