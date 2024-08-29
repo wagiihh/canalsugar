@@ -227,6 +227,18 @@ public class AdminController {
 
         return mav;
     }
+    @GetMapping("/stock")
+    public ModelAndView showstockForm() {
+        ModelAndView mav = new ModelAndView("stock");
+        long totalLaptops = laptopRepository.count();
+        long usedLaptops = assignedLaptopsRepository.count();
+
+        mav.addObject("totalLaptops", totalLaptops);
+        mav.addObject("usedLaptops", usedLaptops);
+        mav.addObject("availableLaptops", totalLaptops - usedLaptops);
+
+        return mav;
+    }
 
     @GetMapping("editlaptops/{laptopid}")
     public ModelAndView editLaptopForm(@PathVariable Integer laptopid, HttpSession session) {

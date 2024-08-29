@@ -24,7 +24,7 @@
 
         /* Sidebar */
         .sidebar {
-            width: 220px;
+            width: 250px;
             position: fixed;
             top: 0;
             left: 0;
@@ -90,6 +90,59 @@
             color: #ffffff;
         }
 
+        /* Asset Boxes */
+        .asset-section {
+            margin-bottom: 40px;
+        }
+
+        .asset-section label {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .asset-box {
+            width: 200px;
+            height: 100px;
+            background-color: #fff;
+            border: 1px solid #ddd;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .asset-box h3 {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+        .asset-box a {
+            margin: 0;
+            font-size: 24px;
+            color: #333;
+        }
+
+        .asset-box p {
+            margin: 5px 0 0;
+            font-size: 16px;
+            color: #777;
+        }
+        
+
+        /* Container for asset boxes */
+        .assets-container {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
         /* Responsive Sidebar */
         @media screen and (max-width: 768px) {
             .sidebar {
@@ -125,56 +178,74 @@
             margin-left: 270px;
             padding-top: 60px;
         }
+        .top-bar{
+            margin-left: 10px;
+            padding-left: 10px;
+        }
     </style>
 </head>
 <body>
-    <div class="top-bar">
-        <!-- <h2 style="text-align: center; padding: 10px;">Canal Sugar</h2>
-        <span class="menu-btn bx bx-menu" style="font-size: 24px; cursor: pointer;"></span> -->
-    </div>
+    <div th:insert="navigation"></div>
+   
+    <div class="container">
+        <!-- Laptop Records -->
+        <div class="asset-section">
+            <label for="Laptops">LAPTOP RECORDS:</label>
+            <div class="assets-container">
+                <div class="asset-box">
+                    <a th:text="${totalLaptops}" th:href="@{/admin/viewlaptops}" style="font-size: 24px; color: #333; text-decoration: none;"></a>
 
-    <div class="sidebar">
-        <h2>CANAL SUGAR</h2>
-        <a th:href="@{/admin/home}">HOME</a>
-        <a th:href="@{/admin/stock}">STOCK</a>
-        
-        <button class="dropdown-btn">RESOURCES 
-            <i class="bx bx-chevron-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a href="#">MANAGE SCREENS</a>
-            <a href="#">MANAGE KEYBOARDS</a>
-            <button class="dropdown-btn">MANAGE LAPTOPS
-                <i class="bx bx-chevron-down"></i>
-            </button>
-            <div class="dropdown-container">
-                <a th:href="@{/admin/addlaptop}">ADD LAPTOP</a>
-                <a th:href="@{/admin/assignLaptop}">ASSIGN LAPTOP</a>
-                <a th:href="@{/admin/viewlaptops}">VIEW LAPTOPS</a>
-                <a th:href="@{/admin/viewassignedlaptops}">VIEW ASSIGNED LAPTOPS</a>
+                    <a th:href="@{/admin/viewlaptops}"style="font-size: 16px; color: #777; text-decoration: none;">Total Laptops</a>
+                </div>
+                <div class="asset-box">
+                    <a th:text="${usedLaptops}" th:href="@{/admin/viewassignedlaptops}" style="font-size: 24px; color: #333; text-decoration: none;"></a>
+                    <a th:href="@{/admin/viewassignedlaptops}"style="font-size: 16px; color: #777; text-decoration: none;">Used Laptops</a>
+                </div>
+                <div class="asset-box">
+                    <h3 th:text="${availableLaptops}"></h3>
+                    <p>Available Laptops</p>
+                </div>
             </div>
         </div>
 
-        <button class="dropdown-btn"> MANAGE USERS 
-            <i class="bx bx-chevron-down"></i>
-        </button>
-        <div class="dropdown-container">
-            <a th:href="@{/admin/adduser}">ADD USER</a>
-            <a href="@{/admin/viewUsers}">VIEW USERS</a>
-            <button class="dropdown-btn">User Submenu 3
-                <i class="bx bx-chevron-down"></i>
-            </button>
-            <div class="dropdown-container">
-                <a href="#">User Sub-submenu 1</a>
-                <a href="#">User Sub-submenu 2</a>
+        <!-- Screen Records -->
+        <div class="asset-section">
+            <label for="SCREEN">SCREEN RECORDS:</label>
+            <div class="assets-container">
+                <div class="asset-box">
+                    <h3>20</h3>
+                    <p>Total Screens</p>
+                </div>
+                <div class="asset-box">
+                    <h3>20</h3>
+                    <p>Used Screens</p>
+                </div>
+                <div class="asset-box">
+                    <h3>10</h3>
+                    <p>Available Screens</p>
+                </div>
             </div>
         </div>
 
-        <a th:href="@{/admin/settings}">SETTINGS</a>
-        <a th:href="@{/admin/logout}">LOGOUT</a>
+        <!-- Keyboard Records -->
+        <div class="asset-section">
+            <label for="KEYBOARD">KEYBOARD RECORDS:</label>
+            <div class="assets-container">
+                <div class="asset-box">
+                    <h3>20</h3>
+                    <p>Total Keyboards</p>
+                </div>
+                <div class="asset-box">
+                    <h3>20</h3>
+                    <p>Used Keyboards</p>
+                </div>
+                <div class="asset-box">
+                    <h3>10</h3>
+                    <p>Available Keyboards</p>
+                </div>
+            </div>
+        </div>
     </div>
-
-
 
     <script>
         $(document).ready(function () {

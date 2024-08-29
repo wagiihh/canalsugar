@@ -12,32 +12,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <style>
-        .sidebar {
-            width: 250px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            background-color: #f4f4f4;
-            border-right: 1px solid #ddd;
-            padding: 20px;
-            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        .top-bar{
+            margin-left: 1800px;
         }
-
-        .sidebar a {
-            display: block;
-            padding: 10px;
-            margin-bottom: 10px;
-            color: #333;
-            text-decoration:solid;
-            border-radius: 4px;
-            transition: background-color 0.3s, color 0.3s; 
-}
-
-.sidebar a:hover {
-    background-color: #006d12; 
-    color: #ffffff;
-}
 
         .main--container {
             margin-left: 270px; /* Adjust this to fit the sidebar width */
@@ -76,20 +53,17 @@
     background-position:center;
     padding: 20px;
 }
+.sidebar{
+    margin-right: 100px;
+    padding-right: 100px;
+}
     </style>
     <title>Canal Sugar</title>
 </head>
 
 <body class="body">
-    <div class="sidebar">
-        <h2>CANAL SUGAR</h2>
-        <a th:href="@{/admin/home}">HOME</a>
-        <a href="dashboard.html">STOCK</a>
-        <a href="appointments.html">RESOURCES</a>
-        <a th:href="@{/admin/adduser}">USERS</a>
-        <a th:href="@{/admin/settings}">SETTINGS</a>
-        <a th:href="@{/admin/logout}">LOGOUT</a>
-    </div>
+    <div th:insert="navigation"></div>
+
 
     <div class="main--container">
         <div class="target-vs-sales--container">

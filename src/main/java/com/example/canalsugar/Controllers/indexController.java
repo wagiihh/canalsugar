@@ -20,4 +20,10 @@ public class indexController {
         return mav;
     }
 
+    @GetMapping("/home")
+    public ModelAndView gethome2() {
+        ModelAndView mav = new ModelAndView("CShome2");
+        return mav;
+    }
+
 }
