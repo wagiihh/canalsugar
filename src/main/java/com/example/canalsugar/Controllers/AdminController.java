@@ -281,55 +281,116 @@ public class AdminController {
         }
         return new RedirectView("/User/Login?error=userNotFound  " + email);
     }
-     
+
     @GetMapping("/assignLaptop")
-public ModelAndView showAssignLaptopForm() {
-    ModelAndView mav = new ModelAndView("AssignLaptops");
-    mav.addObject("users", userRepository.findAll());
-    mav.addObject("laptops", laptopRepository.findAll());
-    mav.addObject("assignedLaptop", new AssignedLaptops());
-    return mav;
-}
+    public ModelAndView showAssignLaptopForm() {
+        ModelAndView mav = new ModelAndView("AssignLaptops");
 
-@PostMapping("/assignLaptop")
-public ModelAndView assignLaptop(@ModelAttribute("assignedLaptop") AssignedLaptops assignedLaptop, ModelAndView mav) {
-    mav.setViewName("AssignLaptops");
+        List<Laptop> allLaptops = laptopRepository.findAll();
+        List<Laptop> assignedLaptops = assignedLaptopsRepository.findAll().stream()
+                .map(AssignedLaptops::getLaptop)
+                .collect(Collectors.toList());
 
-    Laptop laptop = assignedLaptop.getLaptop();
-    
-    // Check if the laptop is already assigned to another user
-    if (assignedLaptopsRepository.findByLaptop(laptop) != null) {
-        mav.addObject("error", "This laptop is already assigned to another user.");
+        List<Laptop> availableLaptops = allLaptops.stream()
+                .filter(laptop -> !assignedLaptops.contains(laptop))
+                .collect(Collectors.toList());
+
         mav.addObject("users", userRepository.findAll());
-        mav.addObject("laptops", laptopRepository.findAll());
+        mav.addObject("laptops", availableLaptops);
+        mav.addObject("assignedLaptop", new AssignedLaptops());
+
         return mav;
     }
 
-    try {
-        assignedLaptopsRepository.save(assignedLaptop);
-    } catch (Exception e) {
-        e.printStackTrace(); // Log the exception
-        mav.addObject("error", "An error occurred while assigning the laptop.");
-        mav.addObject("users", userRepository.findAll());
-        mav.addObject("laptops", laptopRepository.findAll());
+    @PostMapping("/assignLaptop")
+    public ModelAndView assignLaptop(@ModelAttribute("assignedLaptop") AssignedLaptops assignedLaptop,
+            ModelAndView mav) {
+        mav.setViewName("AssignLaptops");
+
+        Laptop laptop = assignedLaptop.getLaptop();
+
+        if (assignedLaptopsRepository.findByLaptop(laptop) != null) {
+            mav.addObject("error", "This laptop is already assigned to another user.");
+            mav.addObject("users", userRepository.findAll());
+            mav.addObject("laptops", laptopRepository.findAll());
+            return mav;
+        }
+
+        try {
+            assignedLaptopsRepository.save(assignedLaptop);
+        } catch (Exception e) {
+            e.printStackTrace(); // Log the exception
+            mav.addObject("error", "An error occurred while assigning the laptop.");
+            mav.addObject("users", userRepository.findAll());
+            mav.addObject("laptops", laptopRepository.findAll());
+            return mav;
+        }
+
+        return new ModelAndView("redirect:/admin/viewassignedlaptops");
+    }
+    @GetMapping("editassignedlaptops/{alID}")
+public ModelAndView editAssignedForm(@PathVariable Integer alID, HttpSession session) {
+    ModelAndView mav = new ModelAndView("editAssignedLaptops");
+    AssignedLaptops oldAssigned = this.assignedLaptopsRepository.findByAlID(alID);
+
+    if (oldAssigned.getLaptop() != null) {
+        Laptop laptop = laptopRepository.findById(oldAssigned.getLaptop().getLaptopid())
+                            .orElseThrow(() -> new IllegalArgumentException("Laptop not found"));
+        oldAssigned.setLaptop(laptop);
+    }
+
+    List<User> users = userRepository.findAll();
+    mav.addObject("oldAssigned", oldAssigned);
+    mav.addObject("users", users);
+    return mav;
+}
+
+    
+@PostMapping("editassignedlaptops/{alID}")
+public RedirectView updateAssigned(@ModelAttribute("oldAssigned") AssignedLaptops oldAssigned, @PathVariable Integer alID) {
+    // Fetch the existing AssignedLaptops object from the database to ensure it's managed
+    AssignedLaptops existingAssigned = assignedLaptopsRepository.findByAlID(alID);
+    
+    if (existingAssigned == null) {
+        throw new IllegalArgumentException("Assigned Laptop not found");
+    }
+
+    // Fetch the User from the database based on the ID in oldAssigned
+    User user = userRepository.findById(oldAssigned.getUser().getUserID())
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+    
+    // Update only the modifiable fields
+    existingAssigned.setUser(user);
+    
+    // Save the updated AssignedLaptops object
+    this.assignedLaptopsRepository.save(existingAssigned);
+    
+    return new RedirectView("/admin/viewassignedlaptops");
+}
+
+    
+
+    @GetMapping("deleteassignedlaptops/{alID}")
+    @Transactional
+    public RedirectView deleteAssigned(@PathVariable Integer alID) {
+        AssignedLaptops assignedLaptops=this.assignedLaptopsRepository.findByAlID(alID);
+        this.assignedLaptopsRepository.delete(assignedLaptops);
+
+        return new RedirectView("/admin/viewassignedlaptops");
+    }
+
+    @GetMapping("/viewassignedlaptops")
+    public ModelAndView showassigendForm() {
+        ModelAndView mav = new ModelAndView("viewAssignedLaptops");
+
+        AssignedLaptops assignedLaptops = new AssignedLaptops();
+
+        List<AssignedLaptops> allAssignedLaptops = assignedLaptopsRepository.findAll();
+        mav.addObject("allAssignedLaptops", allAssignedLaptops);
+
         return mav;
     }
 
-    return new ModelAndView("redirect:/admin/viewlaptops");
-}
-    
-    
-@GetMapping("/viewassignedlaptops")
-public ModelAndView showassigendForm() {
-    ModelAndView mav = new ModelAndView("viewAssignedLaptops");
-
-    AssignedLaptops assignedLaptops=new AssignedLaptops();
-
-    List<AssignedLaptops> allAssignedLaptops = assignedLaptopsRepository.findAll();
-    mav.addObject("allAssignedLaptops", allAssignedLaptops);
-
-    return mav;
-}
     @GetMapping("/logout")
     public RedirectView logout(HttpSession session) {
         session.invalidate();

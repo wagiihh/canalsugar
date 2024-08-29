@@ -1,7 +1,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title> View Appointments </title>
+    <title> View Assigned Laptops </title>
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -18,7 +18,10 @@
         background-size: contain;
         margin-top: 50px; /* Adjust margin to account for the top bar */
     }
-
+    .top-bar{
+      padding-left: 500px;
+      margin-left: 40px;
+    }
  
 </style>
 <body>
@@ -30,7 +33,7 @@
     <div class="view" >
 
     
-   <h1 id="h1h1">CANAL SUGAR LAPTOP DEVICES:  </h1>
+   <h1 id="h1h1">CANAL SUGAR ASSIGNED LAPTOP DEVICES:  </h1>
 
    <table class="table table-dark">
     <thead>
@@ -52,9 +55,9 @@
         <td th:text="${laptop.User.firstname}+' '+${laptop.User.lastname}"></td> 
 
 <td>
-    <!-- <a id="edit"    th:href="@{'editlaptops/' + ${laptop.laptopid}}">EDIT</a>
-    ||
-    <a id="delete"  th:href="@{'deletelaptops/' + ${laptop.laptopid}}">DELETE</a> -->
+     <a id="edit"    th:href="@{'editassignedlaptops/' + ${laptop.alID}}">EDIT</a> 
+     || 
+    <a id="delete"  th:href="@{'deleteassignedlaptops/' + ${laptop.alID}}">DELETE</a>
 </td>
       </tr>
       

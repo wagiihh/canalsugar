@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/appointmentForm.css">
+    <title>Edit USERS</title>
+</head>
+
+<h2>Editing Assigned Laptop <span th:text="${oldAssigned.laptop.laptopname}"></span></h2>
+<style>
+    .container {
+        margin-left: 270px;
+        padding-top: 10px;
+    }
+    .card-title {
+        margin-left: 530px; 
+        font-size: 36px;
+    }
+</style>
+
+<body>
+    <div th:insert="navigation"></div>
+
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="card-title">LAPTOP EDIT</h2>
+                <form id="UserForm" th:action="@{/admin/editassignedlaptops/{alID}(alID=${oldAssigned.alID})}" method="post"
+                      th:object="${oldAssigned}">
+                    <input type="hidden" th:field="*{alID}">
+                    <div id="patient-fields">
+                        <div class="form-group">
+                            <label for="LaptopName">Laptop Name:</label>
+                            <input type="text" class="form-control" id="Laptopname" th:field="*{laptop.Laptopname}" 
+                                   placeholder="Laptop Name" th:value="${oldAssigned.laptop.Laptopname}" readonly>
+                            <span th:if="${#fields.hasErrors('laptop.laptopname')}" th:errors="*{laptop.laptopname}" 
+                                  class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="laptopserial">Laptop Serial Number:</label>
+                            <input type="text" class="form-control" id="laptopserial" th:field="*{laptop.laptopserial}" 
+                                   placeholder="Laptop Serial Number" th:value="${oldAssigned.laptop.laptopserial}" readonly>
+                            <span th:if="${#fields.hasErrors('laptop.laptopserial')}" th:errors="*{laptop.laptopserial}" 
+                                  class="error-message"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="LaptopModel">Laptop Model:</label>
+                            <input type="text" class="form-control" id="LaptopModel" th:field="*{laptop.laptopModel}" 
+                                   placeholder="Laptop Model" th:value="${oldAssigned.laptop.laptopModel}" readonly>
+                            <span th:if="${#fields.hasErrors('laptop.laptopModel')}" th:errors="*{laptop.laptopModel}" 
+                                  class="error-message"></span>
+                        </div>
+                        <br>
+                        <label for="user">User:</label>
+                        <select th:field="*{user}" required>
+                            <option th:each="user : ${users}" th:value="${user.userID}" 
+                                    th:text="${user.firstname} + ' ' + ${user.lastname}"></option>
+                        </select>
+                    </div>
+
+                    <button id="submit" type="submit" class="btn btn-primary" name="submit">EDIT</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
