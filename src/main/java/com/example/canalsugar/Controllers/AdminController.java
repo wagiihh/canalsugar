@@ -2,10 +2,14 @@ package com.example.canalsugar.Controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.actuate.autoconfigure.observation.ObservationProperties.Http;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +33,8 @@ import com.example.canalsugar.Repositories.DepartmentRepository;
 import com.example.canalsugar.Repositories.LaptopRepository;
 import com.example.canalsugar.Repositories.UserRepository;
 
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import jakarta.servlet.http.HttpSession;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -46,6 +52,8 @@ public class AdminController {
     private LaptopRepository laptopRepository;
     @Autowired
     private AssignedLaptopsRepository assignedLaptopsRepository;
+    @Autowired
+    private JavaMailSenderImpl mailSender;
 
     @GetMapping("/home")
     public ModelAndView Home(HttpSession session) {
@@ -295,7 +303,7 @@ public class AdminController {
     }
 
     @GetMapping("/assignLaptop")
-    public ModelAndView showAssignLaptopForm() {
+    public ModelAndView showAssignLaptopForm(HttpSession session) {
         ModelAndView mav = new ModelAndView("AssignLaptops");
 
         List<Laptop> allLaptops = laptopRepository.findAll();
@@ -316,9 +324,9 @@ public class AdminController {
 
     @PostMapping("/assignLaptop")
     public ModelAndView assignLaptop(@ModelAttribute("assignedLaptop") AssignedLaptops assignedLaptop,
-            ModelAndView mav) {
+            ModelAndView mav,HttpSession session) {
         mav.setViewName("AssignLaptops");
-
+                
         Laptop laptop = assignedLaptop.getLaptop();
 
         if (assignedLaptopsRepository.findByLaptop(laptop) != null) {
@@ -328,6 +336,14 @@ public class AdminController {
             return mav;
         }
 
+        long totalLaptops = laptopRepository.count();
+        long usedLaptops = assignedLaptopsRepository.count();
+        long availableLaptops=totalLaptops-usedLaptops;
+        if(availableLaptops<=3)
+        {
+            String emaill=(String) session.getAttribute("email");
+            send_stock_warning(emaill);
+        }
         try {
             assignedLaptopsRepository.save(assignedLaptop);
         } catch (Exception e) {
@@ -340,6 +356,43 @@ public class AdminController {
 
         return new ModelAndView("redirect:/admin/viewassignedlaptops");
     }
+
+
+public void send_stock_warning(String mail)
+{         // Set up the mail sender
+        JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
+        mailSender.setHost("smtp.gmail.com");
+        mailSender.setPort(587);
+        mailSender.setUsername("tabibii.application@gmail.com");
+        mailSender.setPassword("maga ltqn qnoi azhz");
+
+
+        Properties props = mailSender.getJavaMailProperties();
+        props.put("mail.transport.protocol", "smtp");
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.debug", "true");
+
+        // Create a mime message
+        MimeMessage message = mailSender.createMimeMessage();
+
+        try {
+            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            helper.setFrom("tabibii.application@gmail.com");
+            helper.setTo(mail);
+            helper.setSubject("CHECK YOUR STOCK");
+            helper.setText("your stock of laptops is almost empty ");
+            // Send the mail
+            mailSender.send(message);
+            System.out.println("Mail sent successfully.");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+            System.out.println("Error while sending mail.");
+        }
+
+}
+
+
     @GetMapping("editassignedlaptops/{alID}")
 public ModelAndView editAssignedForm(@PathVariable Integer alID, HttpSession session) {
     ModelAndView mav = new ModelAndView("editAssignedLaptops");
