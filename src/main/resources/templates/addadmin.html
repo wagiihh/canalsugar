@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Asset Addition</title>
+    <title>Registration or Sign Up form for admins</title>
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap">
@@ -87,37 +87,62 @@
     <div th:include="navigation">
       
     </div>
- 
     <div class="container mt-5">
         <div class="card">
             <div class="card-body">
-                <h2 class="card-title">Laptop Registration</h2>
-                <form th:action="@{/laptop/addlaptop}" th:object="${newLaptop}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
+                <h2 class="card-title">Admin Registration</h2>
+                <form th:action="@{/admin/addadmin}" th:object="${newAdmin}" method="post" enctype="multipart/form-data" onsubmit="return validateForm()">
                     <div id="patient-fields">
                         <div class="form-group">
-                            <label for="firstname">Laptop Name:</label>
-                            <input type="text" class="form-control" id="Laptopname" th:field="*{Laptopname}" placeholder=" Laptop Name" >
-                            <span th:if="${#fields.hasErrors('Laptopname')}" th:errors="*{Laptopname}" class="error-message"></span>
+                            
+                            <label for="firstname">First Name:</label>
+                            <input type="text" class="form-control" id="firstname" th:field="*{firstname}" placeholder="First Name" >
+                            <span th:if="${#fields.hasErrors('firstname')}" th:errors="*{firstname}" class="error-message"></span>
                             <span id="error-fname" class="error-message"> </span>
                         </div>
 
                         <div class="form-group">
-                            <label for="lastname">Laptop Serial Number:</label>
-                            <input type="text" class="form-control" id="LaptopSerial" th:field="*{laptopserial}" placeholder="Laptop Serial Number" >
-                            <span th:if="${#fields.hasErrors('laptopserial')}" th:errors="*{laptopserial}" class="error-message"></span>
+                            <label for="lastname">Last Name:</label>
+                            <input type="text" class="form-control" id="lastname" th:field="*{lastname}" placeholder="Last Name" >
+                            <span th:if="${#fields.hasErrors('lastname')}" th:errors="*{lastname}" class="error-message"></span>
                             <div id="lname-error" class="error-message"></div>
                             <span id="error-lname" class="error-message"> </span>
                         </div>
+                        <div class="form-group">
+                            <label for="email">Email:</label>
+                            <input type="text" class="form-control" id="email" th:field="*{email}" placeholder="Email Address" >
+                            <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="error-message"></span>
+                            <span id="error-email" class="error-message"> </span>
+                        </div>
 
                         <div class="form-group">
-                            <label for="phone">Laptop Model:</label>
-                            <input type="text" class="form-control" id="phone" th:field="*{LaptopModel}" placeholder="Laptop Model" >
-                            <span th:if="${#fields.hasErrors('LaptopModel')}" th:errors="*{LaptopModel}" class="error-message"></span>
+                            <label for="phone">Phone Number:</label>
+                            <input type="text" class="form-control" id="phone" th:field="*{number}" placeholder="Phone Number" >
+                            <span th:if="${#fields.hasErrors('number')}" th:errors="*{number}" class="error-message"></span>
                             <span id="error-phone" class="error-message"> </span>
                         </div>
 
-                    </div>        
+                        <div class="form-group">
+                            <label for="password">Password:</label>
+                            <input type="password" class="form-control" id="password" th:field="*{pass}" placeholder="Password" >
+                            <span th:if="${#fields.hasErrors('pass')}" th:errors="*{pass}" class="error-message"></span>
+                             <span id="error-pass" class="error-message"> </span>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="cpassword">Confirm password:</label>
+                            <input type="password" class="form-control" id="cpassword" placeholder="Confirm Password" name="cpassword" >
+                           
+                            
+                        </div>
+
+                    </div>
+
+
+                
                     
+                    
+
                     <button id="submit" type="submit" class="btn btn-primary" name="submit">Register Now</button>
                 </form>
             </div>

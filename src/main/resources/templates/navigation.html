@@ -148,10 +148,10 @@
                 <i class="bx bx-chevron-down"></i>
             </button>
             <div class="dropdown-container">
-                <a th:href="@{/admin/addlaptop}">ADD LAPTOP</a>
-                <a th:href="@{/admin/assignLaptop}">ASSIGN LAPTOP</a>
-                <a th:href="@{/admin/viewlaptops}">VIEW LAPTOPS</a>
-                <a th:href="@{/admin/viewassignedlaptops}">VIEW ASSIGNED LAPTOPS</a>
+                <a th:href="@{/laptop/addlaptop}">ADD LAPTOP</a>
+                <a th:href="@{/laptop/assignLaptop}">ASSIGN LAPTOP</a>
+                <a th:href="@{/laptop/viewlaptops}">VIEW LAPTOPS</a>
+                <a th:href="@{/laptop/viewassignedlaptops}">VIEW ASSIGNED LAPTOPS</a>
             </div>
         </div>
 
@@ -160,13 +160,13 @@
         </button>
         <div class="dropdown-container">
             <a th:href="@{/admin/adduser}">ADD USER</a>
-            <a href="@{/admin/viewUsers}">VIEW USERS</a>
-            <button class="dropdown-btn">User Submenu 3
+            <a th:href="@{/admin/viewUsers}">VIEW USERS</a>
+            <button class="dropdown-btn">MANAGE ADMINS
                 <i class="bx bx-chevron-down"></i>
             </button>
             <div class="dropdown-container">
-                <a href="#">User Sub-submenu 1</a>
-                <a href="#">User Sub-submenu 2</a>
+                <a th:href="@{/admin/addadmin}">ADD ADMIN</a>
+                <a th:href="@{/admin/viewAdmins}">VIEW ADMINS</a>
             </div>
         </div>
 

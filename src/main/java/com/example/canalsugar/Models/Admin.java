@@ -55,6 +55,10 @@ public class Admin {
     public int getAdminID() {
         return this.AdminID;
     }
+    public Admin getAdmin()
+    {
+        return this;
+    }
 
     public void setAdminID(int AdminID) {
         this.AdminID = AdminID;

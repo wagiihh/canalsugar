@@ -1,7 +1,7 @@
 
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title> View Laptops </title>
+    <title> View Appointments </title>
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"> -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
@@ -11,6 +11,46 @@
 
 </head>
 <style>
+    .top-bar {
+    width: calc(100% - 250px); /* Adjust to fit the sidebar width */
+    height: 50px; /* Height of the top bar */
+    background-color: #f4f4f4; /* Background color of the top bar */
+    color: #fff; /* Text color */
+    position: fixed;
+    top: 0;
+    left: 250px; /* Start after the sidebar */
+    z-index: 1000; /* Ensure it is above other content */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+}
+
+
+    .sidebar {
+        width: 250px;
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        background-color: #f4f4f4;
+        border-right: 1px solid #ddd;
+        padding: 20px;
+        box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        z-index: 999; /* Ensure sidebar is below the top bar */
+    }
+
+    .sidebar a {
+        display: block;
+        padding: 10px;
+        margin-bottom: 10px;
+        color: #333;
+        text-decoration: solid;
+        border-radius: 4px;
+        transition: background-color 0.3s, color 0.3s; 
+    }
+
+    .sidebar a:hover {
+        background-color: #165d0a; 
+        color: #ffffff;
+    }
 
     body {
         background-image: url('../images/CSHOME.jpg');
@@ -22,42 +62,51 @@
  
 </style>
 <body>
-
-    <div th:insert="navigation">
+    <!-- <div class="top-bar">
+        <h2 style="text-align: center; padding: 10px;"></h2>
+    </div>
+    <div class="sidebar">
+        <h2>CANAL SUGAR</h2>
+        <a href="dashboard.html">STOCK</a>
+        <a href="appointments.html">RESOURCES</a>
+        <a th:href="@{users.html}">USERS</a>
+        <a href="settings.html">SETTINGS</a>
+        <a th:href="@{/admin/logout}">LOGOUT</a>
+    </div> -->
+    <div th:include="navigation">
       
     </div>
 
     <div class="view" >
 
     
-   <h1 id="h1h1">CANAL SUGAR LAPTOP DEVICES:  </h1>
+   <h1 id="h1h1">CANAL SUGAR ADMINS:  </h1>
 
    <table class="table table-dark">
     <thead>
       <tr>
-        <th>Laptop ID</th>
-        <th >Laptop Name</th>
-        <th >Laptop Serial Number</th>
-        <th >Laptop Model</th>
-
+        <th>ADMIN ID</th>
+        <th >FirstName</th>
+        <th >LastName</th>
+        <th >Email</th>
+        <th>NUMBER</th>
         <th >ACTIONS</th>
         
       </tr>
     </thead>
     <tbody>
-      <tr th:each="laptop : ${allLaptops}" >
+      <tr th:each="admin : ${alladmins}" >
         
-        <td th:text="${laptop.laptopid}"></td>
-        <td th:text="${laptop.Laptopname}"></td>
-        <td th:text="${laptop.laptopserial}"></td> <!-- Changed here -->
-        <td th:text="${laptop.LaptopModel}"></td>
-        
-
-<td>
-    <a id="edit"    th:href="@{'editlaptops/' + ${laptop.laptopid}}">EDIT</a>
+        <td th:text="${admin.AdminID}"></td>
+        <td th:text="${admin.firstname}"></td>
+        <td th:text="${admin.lastname}"></td>
+        <td th:text="${admin.email}"></td>
+        <td th:text="${admin.number}"></td>
+<!-- <td>
+    <a id="edit"    th:href="@{'edit/' + ${user.UserID}}">EDIT</a>
     ||
-    <a id="delete"  th:href="@{'deletelaptops/' + ${laptop.laptopid}}">DELETE</a>
-</td>
+    <a id="delete"  th:href="@{'delete/' + ${user.UserID}}">DELETE</a>
+</td> -->
       </tr>
       
     </tbody>

@@ -80,7 +80,7 @@
     <div class="container">
         <h1>Assign Laptop to User</h1>
 
-        <form th:action="@{/admin/assignLaptop}" th:object="${assignedLaptop}" method="post">
+        <form th:action="@{/laptop/assignLaptop}" th:object="${assignedLaptop}" method="post">
             <label for="user">User:</label>
             <select th:field="*{user}" required>
                 <option th:each="user : ${users}" th:value="${user.userID}" th:text="${user.firstname} + ' ' + ${user.lastname}"></option>

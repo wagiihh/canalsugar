@@ -193,13 +193,13 @@
             <label for="Laptops">LAPTOP RECORDS:</label>
             <div class="assets-container">
                 <div class="asset-box">
-                    <a th:text="${totalLaptops}" th:href="@{/admin/viewlaptops}" style="font-size: 24px; color: #333; text-decoration: none;"></a>
+                    <a th:text="${totalLaptops}" th:href="@{/laptop/viewlaptops}" style="font-size: 24px; color: #333; text-decoration: none;"></a>
 
-                    <a th:href="@{/admin/viewlaptops}"style="font-size: 16px; color: #777; text-decoration: none;">Total Laptops</a>
+                    <a th:href="@{/laptop/viewlaptops}"style="font-size: 16px; color: #777; text-decoration: none;">Total Laptops</a>
                 </div>
                 <div class="asset-box">
-                    <a th:text="${usedLaptops}" th:href="@{/admin/viewassignedlaptops}" style="font-size: 24px; color: #333; text-decoration: none;"></a>
-                    <a th:href="@{/admin/viewassignedlaptops}"style="font-size: 16px; color: #777; text-decoration: none;">Used Laptops</a>
+                    <a th:text="${usedLaptops}" th:href="@{/laptop/viewassignedlaptops}" style="font-size: 24px; color: #333; text-decoration: none;"></a>
+                    <a th:href="@{/laptop/viewassignedlaptops}"style="font-size: 16px; color: #777; text-decoration: none;">Used Laptops</a>
                 </div>
                 <div class="asset-box">
                     <h3 th:text="${availableLaptops}"></h3>

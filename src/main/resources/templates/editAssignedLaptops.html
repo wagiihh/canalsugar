@@ -109,7 +109,7 @@
         <div class="card">
             <div class="card-body">
                 <h2 class="card-title">EDIT ASSIGNED LAPTOPS</h2>
-                <form id="UserForm" th:action="@{/admin/editassignedlaptops/{alID}(alID=${oldAssigned.alID})}" method="post"
+                <form id="UserForm" th:action="@{/laptop/editassignedlaptops/{alID}(alID=${oldAssigned.alID})}" method="post"
                       th:object="${oldAssigned}">
                     <input type="hidden" th:field="*{alID}">
                     <div id="patient-fields">
